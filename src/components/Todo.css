@@ -1,0 +1,12 @@
+.edit-button {
+    background-color: green;
+}
+.delete-button {
+    background-color: skyblue;
+}
+
+
+.disable {
+    pointer-events: none;
+    background-color: grey;
+}
