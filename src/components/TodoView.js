@@ -22,6 +22,8 @@ class TodoView extends Component {
     isBlank: false,
     message: "",
     editValue: '',
+    disabledEditButton:false,
+    
   };
 
   handleOnChange = (event) => {
@@ -94,6 +96,7 @@ class TodoView extends Component {
       todoList: newArr,
       
       editValue: editTodoValue,//assign' the todo value for later use in func handleOnEditChange
+      disabledEditButton: true,//to disable edit buttons
     })
     console.log(newArr)
   };
@@ -109,18 +112,19 @@ class TodoView extends Component {
 
   handleOnUpdate = (targetId)=>{
     let copiedArr = [...this.state.todoList];
-    let newTodo;
+    
     let newArr = copiedArr.map((item)=>{
       if(item.id === targetId){
         item.toggle = false;
         item.todo = this.state.editValue;
-        // console.log(item.newTodo)
+        
       }
       return item;
     })
 
     this.setState({
       todoList:newArr,
+      disabledEditButton:false,//undisable the edit button
     })
     
     
@@ -128,7 +132,7 @@ class TodoView extends Component {
   }
 
   render() {
-    const { todoList, isBlank, message, editToggle, editValue } = this.state;
+    const { todoList, isBlank, message, editToggle, editValue,disabledEditButton } = this.state;
 
     return (
       <div>
@@ -158,6 +162,7 @@ class TodoView extends Component {
           handleOnChange={this.handleOnChange}
           handleOnEditChange={this.handleOnEditChange}
           handleOnUpdate={this.handleOnUpdate}
+          disabledEditButton={disabledEditButton}
         />
 
         {/* <ul>

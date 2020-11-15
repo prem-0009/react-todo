@@ -16,6 +16,7 @@ const Todo = (props) => {
     handleInputUpdate,
     editValue,
     handleOnEditChange,
+    disabledEditButton,
   } = props;
   // console.log(todoList)
   return (
@@ -37,9 +38,7 @@ const Todo = (props) => {
                 value={editValue}
               />
             ):(
-              <span
-                className="disabled"
-              >{todo}</span>
+              <span>{todo}</span>
               
             )}
 
@@ -48,8 +47,8 @@ const Todo = (props) => {
             {toggle ?
               (
                 <span 
-                className="edit-button "
-                //why onClick={(id)=>handleOnUpdate(id)} doesn't work
+                className="edit-button  "
+               //why onClick={(id)=>handleOnUpdate(id)} doesn't work
                 onClick={()=>handleOnUpdate(id)}
 
                 
@@ -58,7 +57,8 @@ const Todo = (props) => {
               ):
               (
               <span 
-                className="edit-button disabled"
+                className={`edit-button 
+                ${disabledEditButton ? 'disable' : ''}`}
                 onClick={()=>handleOnEdit(id)}
               >edit
               </span>
