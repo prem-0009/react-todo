@@ -67,7 +67,9 @@ const Todo = (props) => {
             }
             {/* -------------------------------edit */ }
             {' '}
-            <span className="delete-button" onClick={() => handleOnDelete(id)}>
+            <span 
+            className="delete-button " onClick={() => handleOnDelete(id)}
+            >
               {'  '}
               delete
             </span>
@@ -78,9 +80,14 @@ const Todo = (props) => {
   );
 };
 
-// Todo.propTypes = {
-
-// }
+Todo.propTypes = {
+ todoList:PropTypes.arrayOf(
+   PropTypes.shape({
+    id:PropTypes.string.isRequired,
+    todo: PropTypes.number.isRequired,
+   })
+ )
+}
 
 //all the logic here
 
