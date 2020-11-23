@@ -2,8 +2,9 @@ import React, { Component } from "react";
 // import validator from "validator";
 // import axios from "axios";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import jwtDecode from 'jwt-decode'
 
-import TodoView from "./components/todo/TodoView.js";
+import Todo from "./components/todo/Todo.js";
 import SignIn from "./components/signin/Signin";
 import SignUp from "./components/signup/Signup";
 import Nav from "./components/nav/Nav";
@@ -22,6 +23,49 @@ class App extends Component {
     signedUpMessage: "",
   };
 
+
+  componentDidMount = () => {
+    
+    const token = localStorage.getItem("jwtToken");
+    
+    if (token) {
+      let decoded = jwtDecode(token);
+      // console.log('decoded',decoded);
+
+      this.setState({
+        isAuth: true,
+        user: {
+          email: decoded.email,
+          _id: decoded._id,
+        },
+      });
+    }
+  };
+
+  auth = ()=>{
+    const token = localStorage.getItem("jwtToken");
+    
+    if (token) {
+      let decoded = jwtDecode(token);
+      // console.log('decoded',decoded);
+
+      this.setState({
+        isAuth: true,
+        user: {
+          email: decoded.email,
+          _id: decoded._id,
+        },
+      });
+    }
+
+  }
+
+  logout = () => {
+    localStorage.removeItem("jwtToken");
+    // console.log(this.props);
+    // this.props.logout();
+  };
+
   render() {
     const {
       isAuth,
@@ -32,17 +76,21 @@ class App extends Component {
       passwordError,
       passwordErrorMessage,
     } = this.state;
-    console.log('app',this.props)
+    // console.log('app',this.props)
     return (
       <Router>
-      <Nav />
-        {/* {isAuth ?  */}
+        {/* {isAuth ? 
+          <Todo/>:null
+          
+        }  */}
+        <Nav isAuth={this.state.isAuth} user={this.state.user}/>
         <Switch>
+          
           <Route exact path="/signup" component={SignUp} />
           <Route exact path="/signin" component={SignIn} />
+          <Route exact path="/todo" component={Todo} />
+          {/* <Route exact path="/nav" component={Nav} /> */}
         </Switch>
-        
-        //  {/* } */}
 
       </Router>
     );
