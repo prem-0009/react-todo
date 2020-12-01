@@ -8,40 +8,53 @@ export default class Nav extends Component {
     user: null,
   };
 
-  componentDidMount = () => {
-    
-    const token = localStorage.getItem("jwtToken");
-    
-    if (token) {
-      let decoded = jwtDecode(token);
-      console.log('decoded',decoded);
+  // componentDidMount = () => {
+  //   const token = localStorage.getItem("jwtToken");
 
-      this.setState({
-        isAuth: true,
-        user: {
-          email: decoded.email,
-          _id: decoded._id,
-        },
-      });
-    }
-  };
+  //   if (token) {
+  //     let decoded = jwtDecode(token);
+  //     console.log("decoded", decoded);
 
-  logout = () => {
-    localStorage.removeItem("jwtToken");
-    // console.log(this.props);
-    // this.props.logout();
-  };
+  //     this.setState({
+  //       isAuth: true,
+  //       user: {
+  //         email: decoded.email,
+  //         _id: decoded._id,
+  //       },
+  //     });
+  //   }
+  //   // console.log("hi");
+  //   console.log('props did monunt',this.props)
+  // };
+
+  //   componentDidUpdate=()
+
+  // logout = () => {
+  //   localStorage.removeItem("jwtToken");
+  //   this.setState({
+  //     isAuth: false,
+  //     user: null,
+  //   });
+
+  //   // console.log(this.props);
+  //   // this.props.logout();
+  // };
+
+  logout = ()=>{
+    this.props.logout();
+  }
 
   render() {
     let nav;
-    if (this.state.isAuth) {
+    // console.log('props nav',this.props)
+    if (this.props.isAuth && this.props.user !== null) {
       nav = (
-        <ul>
-          <li>
-            <Link to="/signup">{this.state.user.email}</Link>
+        <ul style={{ listStyle: "none" }}>
+          <li style={{ display: "inline" }}>
+            <Link to="/signup">{this.props.user.email}</Link>
           </li>
-          <br />
-          <li>
+
+          <li style={{ display: "inline", marginLeft: 15 }}>
             <Link to="/logout" onClick={this.logout}>
               log out
             </Link>

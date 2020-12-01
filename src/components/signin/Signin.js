@@ -85,7 +85,7 @@ class SignIn extends Component {
           console.log('props', this.props)
 
       })
-      console.log('props2',this.state)
+    //   console.log,this.state)
       //   console.log("sendback", sendToBack);
     } catch (e) {
       console.log(e);
@@ -151,6 +151,7 @@ class SignIn extends Component {
   };
 
   render() {
+      // console.log('signin props',this.props)
     const {
       isAuth,
       email,
@@ -161,10 +162,13 @@ class SignIn extends Component {
       passwordErrorMessage,
     } = this.state;
     return (
-      <div style={{ marginTop: "20%", textAlign: "center" }}>
-        {emailError ? <div> {emailErrorMessage} </div> : null}
+      <div style={{ marginTop: "20%", textAlign: "center", padding:'10'}}>
+       <div>
+           
+            {emailError ? <div> {emailErrorMessage} </div> : null}
 
         {passwordError ? <div>{passwordErrorMessage}</div> : null}
+           </div>
 
         {/* {isAuth ? (
           <Todo />
@@ -175,16 +179,20 @@ class SignIn extends Component {
               name="email"
               value={email}
               onChange={this.handleOnChangeEmail}
+              placeholder='email'
             />
-            email
+            
             <br />
+            
             <input
               type="text"
               name="password"
               value={password}
               onChange={this.handleOnChangePassword}
+              placeholder='password'
             />
-            password
+            
+            <br />
             <br />
             <button onClick={(event) => this.handleOnSubmit(event)}>
               sign in

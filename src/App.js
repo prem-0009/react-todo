@@ -2,7 +2,7 @@ import React, { Component } from "react";
 // import validator from "validator";
 // import axios from "axios";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import jwtDecode from 'jwt-decode'
+import jwtDecode from "jwt-decode";
 
 import Todo from "./components/todo/Todo.js";
 import SignIn from "./components/signin/Signin";
@@ -23,11 +23,9 @@ class App extends Component {
     signedUpMessage: "",
   };
 
-
   componentDidMount = () => {
-    
     const token = localStorage.getItem("jwtToken");
-    
+
     if (token) {
       let decoded = jwtDecode(token);
       // console.log('decoded',decoded);
@@ -42,9 +40,9 @@ class App extends Component {
     }
   };
 
-  auth = ()=>{
+  auth = () => {
     const token = localStorage.getItem("jwtToken");
-    
+
     if (token) {
       let decoded = jwtDecode(token);
       // console.log('decoded',decoded);
@@ -57,11 +55,14 @@ class App extends Component {
         },
       });
     }
-
-  }
+  };
 
   logout = () => {
     localStorage.removeItem("jwtToken");
+  this.setState({
+    isAuth:false,
+    user:null,
+  })
     // console.log(this.props);
     // this.props.logout();
   };
@@ -83,15 +84,27 @@ class App extends Component {
           <Todo/>:null
           
         }  */}
-        <Nav isAuth={this.state.isAuth} user={this.state.user}/>
+        <Nav
+          isAuth={this.state.isAuth}
+          user={this.state.user}
+          logout={this.logout}
+        />
         <Switch>
-          
           <Route exact path="/signup" component={SignUp} />
-          <Route exact path="/signin" component={SignIn} />
-          <Route exact path="/todo" component={Todo} />
+          <Route
+            exact
+            path="/signin"
+            component={(props) => <SignIn {...props} auth={this.auth} />}
+          />
+          <Route
+            exact
+            path="/todo"
+            component={Todo}
+            isAuth={this.state.isAuth}
+            user={this.state.user}
+          />
           {/* <Route exact path="/nav" component={Nav} /> */}
         </Switch>
-
       </Router>
     );
   }

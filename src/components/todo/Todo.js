@@ -5,18 +5,13 @@ import { v4 as uuidv4 } from "uuid";
 import "./Todo.css";
 import TodoView from "./TodoView";
 import jwtDecode from "jwt-decode";
+import axios from "axios";
 // import { BrowserRouter, Router, Switch, Route, Link } from "react-router-dom";
 
 console.clear();
 class Todo extends Component {
   state = {
-    todoList: [
-      {
-        id: uuidv4(),
-        todo: "walk the dog",
-        toggle:false,
-      },
-    ],
+    todoList: [],
     todoValue: "",
     isBlank: true,
     message: "",
@@ -25,24 +20,61 @@ class Todo extends Component {
     isAuth: false,
   };
 
-  componentDidMount = () => {
-    console.log('hi')
-    const token = localStorage.getItem("jwtToken");
+  // componentDidMount = () => {
+  //   const token = localStorage.getItem("jwtToken");
 
-    if (token) {
-      let decoded = jwtDecode(token);
-      // console.log(decoded);
+  //   if (token) {
+  //     let decoded = jwtDecode(token);
+  //     // console.log(decoded);
 
-      this.setState({
-        isAuth: true,
-        user: {
-          email: decoded.email,
-          _id: decoded._id,
-        },
-      });
-    }
+  //     this.setState({
+  //       isAuth: true,
+  //       user: {
+  //         email: decoded.email,
+  //         _id: decoded._id,
+  //       },
+  //     });
+  //   }
+  //   console.log(this.state.isAuth)
+  // };
+  async componentDidMount() {
     
-  };
+    fetch(`http://localhost:4000/api/todo/get-todo`)
+    .then(res=>res.json())
+    .then((result)=>{
+      let todoArray = result.map((item)=>{
+        // console.log(item.todo)
+        // todoList.id=item._id;
+        return item
+      })
+      console.log(todoArray)
+      this.setState({
+        todoList:todoArray
+
+      })
+    })
+    
+    
+    return;
+    try {
+      
+      let allTodo = await `http://localhost:4000/api/todo/get-todo`;
+      
+      let todoArray = allTodo.map((todo) => {
+        console.log(todo)
+        return todo;
+      });
+      
+      this.setState({
+        todoList: todoArray,
+      });
+
+      console.log(this.state.todoList)
+
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   handleOnChange = (event) => {
     this.setState({
@@ -53,6 +85,15 @@ class Todo extends Component {
   };
 
   handleOnAdd = async () => {
+    console.log(this.state.todoValue);
+    let success = await axios.post(
+      "http://localhost:4000/api/todo/create-todo",
+      {
+        // id: uuidv4(),
+        todo: this.state.todoValue,
+      }
+    );
+    return;
     let newTodo = {
       id: uuidv4(),
       todo: this.state.todoValue,
@@ -72,9 +113,6 @@ class Todo extends Component {
       todoValue: "",
     });
 
-    // let success = await axios.post("http://localhost:4000/api/user/todo", {
-    //   id: uuidv4(),
-    // });
     // console.log(success);
   };
 
@@ -156,23 +194,23 @@ class Todo extends Component {
       editValue,
       disabledEditButton,
     } = this.state;
-    // console.log(todoList);
+    // console.log(this.props.isAuth);
     return (
-      <div style={{marginTop:'15%', textAlign: "center"}}>
+      <div style={{ marginTop: "15%", textAlign: "center" }}>
         {/* //------------no word in input */}
         {isBlank ? <div>{message}</div> : null}
         {/* {isAuth ? <div> */}
         <input
-        type="text"
-        name="todoValue"
-        value={this.state.todoValue}
-        onChange={this.handleOnChange}
+          type="text"
+          name="todoValue"
+          value={this.state.todoValue}
+          onChange={this.handleOnChange}
         />
-        
+
         <button onClick={this.handleOnAdd}>add</button>
-        
+
         <TodoView
-        // handleOnChange={this.handleOnChange}
+          // handleOnChange={this.handleOnChange}
           todoList={todoList}
           handleOnDelete={this.handleOnDelete}
           // isTrue={isTrue}
@@ -187,12 +225,11 @@ class Todo extends Component {
           disabledEditButton={disabledEditButton}
           componentDidMount={this.componentDidMount}
           isAuth={isAuth}
-          />
-           {/* </div>
+        />
+        {/* </div>
            :
            null
            }  */}
-        
 
         {/* <ul>
           {todoList.map(({id, todo}) => (

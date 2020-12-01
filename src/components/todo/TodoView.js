@@ -39,6 +39,7 @@ const TodoView = ({//-----------------------function
         )}
         {/* --------------------edit */}
         
+        {' '}
         {toggle ? (
           <span
             className="edit-button"
